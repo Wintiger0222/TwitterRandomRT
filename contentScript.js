@@ -16,33 +16,40 @@ function getRandomItem(set) {
 
 async function OnRandom(response) {
 
-    var find = document.querySelectorAll('[aria-label="Timeline: Reposted by"]');
+    let modal = false;
+    var element, load_more;
+    var find = document.querySelectorAll('[id="retweets"]');
     if (find.length == 0) {
-        find = document.querySelectorAll('[aria-label="타임라인: 재게시한 사용자"]');
+        modal = true;
+        element = document.getElementsByClassName('retweets')[0];
+        load_more = document.getElementsByClassName('retweets-more')[0];
     }
-    var element = find[0];
+    else{
+        modal = false;
+        element = document.getElementById('retweets');
+        load_more = document.getElementById('retweets-more');
+    }
 
-    var prevY = 0;
 
-    element.parentNode.parentNode.scroll(0, 0);
     await sleep(500);
+    var preRetweet = element.getElementsByClassName('following-item').length;
+
     while (true) {
-        var currentY = element.parentNode.parentNode.scrollTop + 200;
-
-        if (currentY == prevY)
-            break;
-        element.parentNode.parentNode.scroll(0, currentY);
-
+        load_more.click();
         await sleep(500);
-
-        prevY = currentY;
+        var currentRetweet = element.getElementsByClassName('following-item').length;
+        
+        if(currentRetweet != preRetweet){
+            preRetweet = currentRetweet;
+        }
+        else {
+            break;
+        }
     }
 
-    element.parentNode.parentNode.scroll(0, getRandomInt(0, prevY));
     await sleep(500);
 
-
-    var find = element.querySelectorAll('[data-testid="cellInnerDiv"]');
+    var find = element.getElementsByClassName('following-item');
     var numbers = new Set();
     for (var i = 0; i < find.length; i++) {
         numbers.add(i);
@@ -57,7 +64,7 @@ async function OnRandom(response) {
 
     find[index].scrollIntoView();
     await sleep(500);
-    find[index].style.backgroundColor = "dimgrey";
+    find[index].style.backgroundColor = "var(--lil-darker-gray)";
 }
 
 chrome.runtime.onMessage.addListener((obj, sender, response) => {

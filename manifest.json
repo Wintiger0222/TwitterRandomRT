@@ -1,7 +1,7 @@
 {
-  "name": "Twitter Random RT",
+  "name": "Twitter Random RT for OldTwitter",
   "version": "0.0.0.1",
-  "description": "Chooses Random User Who Retweeted Tweet",
+  "description": "Chooses Random User Who Retweeted Tweet for OldTwitter",
   "permissions": ["tabs"],
   "content_scripts": [
     {
